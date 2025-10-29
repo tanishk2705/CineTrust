@@ -3,6 +3,7 @@ package com.CineTrust.service;
 import com.CineTrust.client.GoogleOAuthClient;
 import com.CineTrust.config.JwtUtils;
 import com.CineTrust.entity.Role;
+import com.CineTrust.entity.Status;
 import com.CineTrust.entity.User;
 import com.CineTrust.repository.UserRepository;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import io.micrometer.core.annotation.Timed;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 
 
@@ -73,7 +76,7 @@ public class GoogleOAuthService {
         return Map.of(
                 "jwt", jwt,
                 "email", user.getEmail(),
-                "name", user.getName(),
+                "name", user.getUsername(),
                 "role", user.getRole()
         );
     }
@@ -88,8 +91,9 @@ public class GoogleOAuthService {
                     return userRepository.save(
                             User.builder()
                                     .email(email)
-                                    .name(name)
+                                    .username(name)
                                     .role(Role.USER)
+                                    .status(Status.ACTIVE)
                                     .build()
                     );
                 });
@@ -100,11 +104,24 @@ public class GoogleOAuthService {
                 "email", user.getEmail(),
                 "role", user.getRole().name()
         );
+
         log.debug("Generating JWT for user email={}", user.getEmail());
-        String token =  jwtUtils.generateToken(user.getEmail(), claims);
-        userSessionService.createSession(user.getId(), token);
-         return token;
+
+        // Generate JWT token
+        String token = jwtUtils.generateToken(user.getEmail(), claims);
+
+        // Extract expiration from JWT or define manually
+        LocalDateTime expirationTime = jwtUtils.getExpirationDateFromToken(token)
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        // Create session entry in DB
+        userSessionService.createSession(user, token, expirationTime);
+
+        return token;
     }
+
 
 
 }
