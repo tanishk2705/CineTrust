@@ -1,7 +1,6 @@
 package com.CineTrust.service;
 
 import com.CineTrust.entity.UserSession;
-import com.CineTrust.repository.UserSessionRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 

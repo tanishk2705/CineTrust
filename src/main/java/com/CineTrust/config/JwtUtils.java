@@ -1,6 +1,5 @@
 package com.CineTrust.config;
 
-import com.CineTrust.repository.UserSessionRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
