@@ -76,6 +76,12 @@ public class GoogleOAuthClient {
     public Map<String, Object> fetchUserInfo(String accessToken) {
         log.info("Fetching Google user info using access token...");
 
+        // Handle null or empty access token case
+        if (accessToken == null || accessToken.isBlank()) {
+            log.warn("Access token is null or empty. Cannot fetch user info.");
+            throw new IllegalArgumentException("Access token must not be null or empty");
+        }
+
         try {
             Map<String, Object> userInfo = webClient.get()
                     .uri("https://www.googleapis.com/oauth2/v3/userinfo")
@@ -85,6 +91,12 @@ public class GoogleOAuthClient {
                     .block();
 
             log.debug("Google user info response: {}", userInfo);
+
+            if (userInfo == null || userInfo.isEmpty()) {
+                log.warn("No user info returned from Google API.");
+                throw new IllegalStateException("Failed to fetch user info from Google");
+            }
+
             log.info("Successfully fetched user info: {}", userInfo.get("email"));
             return userInfo;
 
