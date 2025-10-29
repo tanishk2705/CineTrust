@@ -1,5 +1,6 @@
 package com.CineTrust.config;
 
+import com.CineTrust.repository.UserLoginsRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,10 +23,10 @@ public class JwtUtils {
 
     @Value("${app.jwtExpirationMs}")
     private long jwtExpirationMs;
-    private final UserSessionRepository userSessionRepository;
+    private final UserLoginsRepository userLoginsRepository;
 
-    public JwtUtils(UserSessionRepository userSessionRepository) {
-        this.userSessionRepository = userSessionRepository;
+    public JwtUtils(UserLoginsRepository userLoginsRepository) {
+        this.userLoginsRepository = userLoginsRepository;
     }
 
     /**
@@ -86,6 +87,25 @@ public class JwtUtils {
             throw e;
         } catch (IllegalArgumentException e) {
             log.error("Empty or invalid JWT token", e);
+            throw e;
+        }
+    }
+
+
+
+    /**
+     * ✅ Extract expiration date from JWT token (for DB persistence).
+     */
+    public Date getExpirationDateFromToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8)))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getExpiration();
+        } catch (JwtException e) {
+            log.error("Failed to extract expiration date from JWT", e);
             throw e;
         }
     }

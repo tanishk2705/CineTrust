@@ -72,25 +72,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     return;
                 }
 
-               // Create Spring Security user from JWT directly
+                // Create Spring Security user from JWT directly
                 User authUser = new User(email, "", Collections.singleton(() -> "ROLE_" + role));
 
                 Authentication authentication =
                         new UsernamePasswordAuthenticationToken(authUser, token, authUser.getAuthorities());
 
-//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
-/*
-                String normalizedRole = role.toUpperCase();
-
-                var authorities = Collections.singletonList(
-                        new SimpleGrantedAuthority("ROLE_" + normalizedRole));
-
-                var authentication = new UsernamePasswordAuthenticationToken(
-                        email, null, authorities);
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);*/
 
 
             } catch (JwtException e) {
