@@ -11,7 +11,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        // This tells Spring to ignore trailing slashes in URLs
+        /**
+         * This tells Spring to ignore trailing slashes in URLs
+         */
         configurer.setUseTrailingSlashMatch(true);
     }
 }

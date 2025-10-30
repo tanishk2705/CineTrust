@@ -51,7 +51,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = header.substring(7).trim();  // clean token
 
 
-            // Check if token is valid in DB
+            /**
+             *  Check if token is valid in DB
+             */
             if (!userSessionService.isTokenValid(token)) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Session expired or logged out");
                 return;
@@ -72,12 +74,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     return;
                 }
 
-                // Create Spring Security user from JWT directly
                 User authUser = new User(email, "", Collections.singleton(() -> "ROLE_" + role));
-
                 Authentication authentication =
                         new UsernamePasswordAuthenticationToken(authUser, token, authUser.getAuthorities());
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
 

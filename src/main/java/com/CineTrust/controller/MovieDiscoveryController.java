@@ -16,7 +16,6 @@ import java.util.List;
 public class MovieDiscoveryController {
     private final MovieDiscoveryService movieDiscoveryService;
 
-    // http://localhost:8080/api/v1/movies/available?region=IN&platform=Netflix
     @GetMapping("/movies/available")
     public ResponseEntity<List<MovieDiscoveryResponse>> getAvailableMovies(
             @RequestParam(required = false) String region,
@@ -29,7 +28,6 @@ public class MovieDiscoveryController {
         );
     }
 
-    //  /api/platforms/{platformId}/movies?page=1&size=5&sort=title,asc
     @GetMapping("/platforms/{platformId}/movies")
     public ResponseEntity<List<MovieDiscoveryResponse>> getMoviesByPlatform(
             @PathVariable Long platformId,
@@ -40,7 +38,6 @@ public class MovieDiscoveryController {
         );
     }
 
-    // /api/regions/{code}/movies?page=0&size=10&sort=releaseYear,desc
     @GetMapping("/regions/{code}/movies")
     public ResponseEntity<List<MovieDiscoveryResponse>> getMoviesByRegion(
             @PathVariable String code,

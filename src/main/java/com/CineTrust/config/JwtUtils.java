@@ -94,7 +94,7 @@ public class JwtUtils {
 
 
     /**
-     * ✅ Extract expiration date from JWT token (for DB persistence).
+     *  Extract expiration date from JWT token (for DB persistence).
      */
     public Date getExpirationDateFromToken(String token) {
         try {

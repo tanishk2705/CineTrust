@@ -44,6 +44,6 @@ public class Movie extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
-    private User createdBy; // Admin or critic
+    private User createdBy;
 }
 
