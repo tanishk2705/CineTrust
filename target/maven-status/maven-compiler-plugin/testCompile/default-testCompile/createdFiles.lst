@@ -1,0 +1,5 @@
+com/CineTrust/service/RegionServiceTest.class
+com/CineTrust/service/PlatformServiceTest.class
+com/CineTrust/service/MovieAvailabilityServiceTest.class
+com/CineTrust/MovieDbApplicationTests.class
+com/CineTrust/service/MovieDiscoveryServiceTest.class
